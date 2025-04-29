@@ -18,8 +18,7 @@ param nodeCount int = 1
 @description('Kubernetes version')
 param kubernetesVersion string = '1.31.7'
 
-@description('Owner email address for tagging')
-param ownerEmail string
+
 
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2023-01-01' = {
   name: clusterName
@@ -27,9 +26,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2023-01-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  tags: {
-    owner: ownerEmail
-  }
+ 
   properties: {
     kubernetesVersion: kubernetesVersion
     dnsPrefix: clusterName
