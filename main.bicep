@@ -12,8 +12,7 @@ param clusterName string = 'myAKSCluster'
 @description('Name of the Virtual Network')
 param vnetName string = 'aksVNet'
 
-@description('Owner email address (must be a Neudesic.com address)')
-param ownerEmail string
+
 
 // 1. Deploy Resource Group (at subscription scope)
 module rgModule 'modules/rg.bicep' = {
@@ -22,7 +21,7 @@ module rgModule 'modules/rg.bicep' = {
   params: {
     rgName: rgName
     rgLocation: rgLocation
-    ownerEmail: ownerEmail
+
   }
 }
 
@@ -34,7 +33,7 @@ module networkModule 'modules/network.bicep' = {
   params: {
     location: rgLocation
     vnetName: vnetName
-    ownerEmail: ownerEmail
+
   }
 }
 
@@ -42,12 +41,11 @@ module networkModule 'modules/network.bicep' = {
 module aksCluster 'modules/aks.bicep' = {
   name: 'aksDeployment'
   scope: resourceGroup(rgName)
-  dependsOn: [networkModule]
   params: {
     clusterName: clusterName
     location: rgLocation
     subnetId: networkModule.outputs.aksSubnetId
-    ownerEmail: ownerEmail
+
   }
 }
 
