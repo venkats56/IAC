@@ -10,15 +10,11 @@ param vnetAddressPrefix string = '10.0.0.0/16'
 @description('AKS subnet address prefix')
 param aksSubnetPrefix string = '10.0.0.0/24'
 
-@description('Owner email address')
-param ownerEmail string
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnetName
   location: location
-  tags: {
-    owner: ownerEmail
-  }
+
   properties: {
     addressSpace: {
       addressPrefixes: [
