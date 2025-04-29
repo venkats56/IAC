@@ -16,7 +16,7 @@ param vnetName string = 'aksVNet'
 param ownerEmail string
 
 // 1. Deploy Resource Group (at subscription scope)
-module rgModule 'rg.bicep' = {
+module rgModule 'modules/rg.bicep' = {
   name: 'resourceGroupDeployment'
   scope: subscription()
   params: {
@@ -27,7 +27,7 @@ module rgModule 'rg.bicep' = {
 }
 
 // 2. Deploy network (after RG is created)
-module networkModule 'network.bicep' = {
+module networkModule 'modules/network.bicep' = {
   name: 'networkDeployment'
   scope: resourceGroup(rgName)
   dependsOn: [rgModule]
@@ -39,9 +39,10 @@ module networkModule 'network.bicep' = {
 }
 
 // 3. Deploy AKS (after network is created)
-module aksCluster 'aks.bicep' = {
+module aksCluster 'modules/aks.bicep' = {
   name: 'aksDeployment'
   scope: resourceGroup(rgName)
+  dependsOn: [networkModule]
   params: {
     clusterName: clusterName
     location: rgLocation
@@ -53,3 +54,4 @@ module aksCluster 'aks.bicep' = {
 output resourceGroupId string = rgModule.outputs.resourceGroupId
 output vnetName string = networkModule.outputs.vnetName
 output aksClusterName string = aksCluster.outputs.clusterName
+
